@@ -1,4 +1,10 @@
 
+
+
+## 🌱 Planto App Demo
+
+![Planto App Demo](planto-demo.gif)
+
 # 🌱 Planto
 
 Planto is an iOS plant care application built with SwiftUI using the MVVM architecture

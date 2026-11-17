@@ -39,22 +39,35 @@ class PlantViewModel: ObservableObject {
         return Double(wateredCount) / Double(plants.count)
     }
 
+    
     var progressMessage: String {
 
+        // No plants added
         if plants.isEmpty {
             return "No plants yet 🌱"
         }
 
+        // No plants have been watered
         if wateredCount == 0 {
+
+            // One plant
+            if plants.count == 1 {
+                return "Your plant is waiting for a sip 💦"
+            }
+
+            // More than one plant
             return "Your plants are waiting for a sip 💦"
         }
 
+        // All plants have been watered
         if wateredCount == plants.count {
             return "All your plants are watered! 🌿"
         }
 
+        // Some plants have been watered
         return "\(wateredCount) of \(plants.count) plants watered 💧"
     }
+
     
   
     func updatePlant(

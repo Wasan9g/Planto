@@ -35,9 +35,12 @@ class NotificationManager {
         content.body = "Hey! Let's water \(plantName) 💧"
         content.sound = .default
 
+        
         let trigger = UNTimeIntervalNotificationTrigger(
             timeInterval: Double(days) * 24 * 60 * 60,
             repeats: true
+        
+
         )
 
         let request = UNNotificationRequest(
