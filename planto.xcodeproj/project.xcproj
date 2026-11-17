@@ -11,6 +11,7 @@
     ],
   },
   "files": [
+    { "path": "README 2.md", "target-membership": [ "planto/resources" ] },
     { "path": "p1.swift", "target-membership": [ "planto/compile-sources" ] },
     { "path": "NotificationManager.swift", "target-membership": [ "planto/compile-sources" ] },
     { "path": "plant.swift", "target-membership": [ "planto/compile-sources" ] },
