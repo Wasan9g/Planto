@@ -24,6 +24,8 @@
         { "path": "<PRODUCTS>/planto.app", "id": "000000000000000000000120", "type": "wrapper.application", "index": false },
       ],
     },
+    { "path": "planto-demo.gif", "target-membership": [ "planto/resources" ] },
+    { "path": "thankyou.mp3", "target-membership": [ "planto/resources" ] },
   ],
   "targets": [
     {

@@ -18,7 +18,13 @@ struct ContentView: View {
     @State private var selectedPlant: Plant? = nil
 
     // Speaks the celebration message
-    @State private var speaker = AVSpeechSynthesizer()
+    @State private var audioPlayer: AVAudioPlayer?
+    
+    // Remember if the user has opened Set Reminder
+
+    // Tracks whether the reminder page was opened
+    // Resets when the app starts again
+    @State private var hasOpenedReminder = false
 
 
     // MARK: - Main View
@@ -61,9 +67,17 @@ struct ContentView: View {
                 Spacer()
 
                 // Welcome screen when no plants exist
+                
                 if viewModel.plants.isEmpty {
-                    emptyState
+
+                    // Show No Reminders after opening Set Reminder
+                    if hasOpenedReminder {
+                        noRemindersView
+                    } else {
+                        emptyState
+                    }
                 }
+
 
                 Spacer()
 
@@ -132,18 +146,18 @@ struct ContentView: View {
 
     // Displayed when no plants have been added
     private var emptyState: some View {
-
+        
         VStack(spacing: 20) {
-
+            
             Image(.image1)
                 .resizable()
                 .scaledToFit()
                 .frame(width: 170, height: 170)
-
+            
             Text("Start your plant journey")
                 .font(.system(size: 28, weight: .bold))
                 .foregroundStyle(.white)
-
+            
             Text("Now all your plants will be in one place and we will help you take care of them :)🪴")
                 .font(.system(size: 13))
                 .foregroundStyle(.gray)
@@ -151,6 +165,20 @@ struct ContentView: View {
                 .frame(maxWidth: 290)
         }
     }
+        // MARK: - No Reminders
+
+        // Shown when all reminders are deleted or cancelled
+        private var noRemindersView: some View {
+            
+            Text("No reminders set yet..")
+                .font(.system(size: 14))
+                .foregroundStyle(.gray)
+                .frame(maxWidth: .infinity)
+        }
+
+       
+        
+    
 
 
     // MARK: - 3. Progress Section
@@ -301,7 +329,7 @@ struct ContentView: View {
                     infoLabel(
                         plant.light,
                         icon: "sun.max",
-                        color: .yellow
+                        color: .y
                     )
 
                     infoLabel(
@@ -375,14 +403,13 @@ struct ContentView: View {
 
             // Clear the previously selected plant
             selectedPlant = nil
-
+            hasOpenedReminder = true
             // Open the Add Plant page
             showReminder = true
 
         } label: {
 
-            if viewModel.plants.isEmpty {
-
+            if viewModel.plants.isEmpty && !hasOpenedReminder {
                 // Main button for the empty screen
                 Text("Set Plant Reminder")
                     .font(.system(size: 14, weight: .medium))
@@ -429,40 +456,40 @@ struct ContentView: View {
         .buttonStyle(.plain)
 
         // Keep the original button position
+        
         .padding(
             .bottom,
-            viewModel.plants.isEmpty ? 180 : 30
+            viewModel.plants.isEmpty && !hasOpenedReminder ? 180 : 30
         )
+
     }
 
 
     // MARK: - 9. Thank You Voice
 
     // Speaks a message when all plants are watered
+    
     private func playThankYouVoice() {
 
-        // Create the spoken sentence
-        let message = AVSpeechUtterance(
-            string: "Thank you for taking care of me!"
-        )
+        // Find the recorded voice
+        guard let url = Bundle.main.url(
+            forResource: "thankyou",
+            withExtension: "mp3"
+        ) else {
+            print("Audio file not found")
+            return
+        }
 
-        // Use an English voice
-        message.voice = AVSpeechSynthesisVoice(
-            language: "en-US"
-        )
-
-        // Set the speaking speed
-        message.rate = 0.45
-
-        // Stop any previous speech
-        speaker.stopSpeaking(at: .immediate)
-
-        // Play the message
-        speaker.speak(message)
+        // Play the recorded voice
+        do {
+            audioPlayer = try AVAudioPlayer(contentsOf: url)
+            audioPlayer?.play()
+        } catch {
+            print("Audio error: \(error)")
+        }
     }
+    
 }
-
-
 // MARK: - Preview
 
 #Preview {
